@@ -1,11 +1,10 @@
--- CREATE DATABASE cinema_db;
--- \c cinema_db;
+
 
 CREATE TABLE IF NOT EXISTS movies (
     id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     genre VARCHAR(100) NOT NULL,
-    duration INTEGER NOT NULL, -- in minutes
+    duration INTEGER NOT NULL,
     rating DECIMAL(3, 1) CHECK (rating >= 0 AND rating <= 10),
     release_date DATE NOT NULL
 );
