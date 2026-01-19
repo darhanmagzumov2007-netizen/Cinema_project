@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class DatabaseConfig {
     private static final String URL = "jdbc:postgresql://localhost:5432/cinemadb";
-    private static final String USER = "";
+    private static final String USER = "Adil";
     private static final String PASSWORD = "asd222555";
 
     private static Connection connection = null;
@@ -27,3 +27,17 @@ public class DatabaseConfig {
 
         return connection;
     }
+
+    public static void closeConnection() {
+        if (connection != null) {
+            try {
+                connection.close();
+
+                System.out.println("Database connection closed.");
+
+            } catch (SQLException e) {
+                System.err.println("Error closing connection: " + e.getMessage());
+            }
+        }
+    }
+}
