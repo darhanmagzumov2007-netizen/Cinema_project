@@ -19,8 +19,8 @@ public class CinemaService {
     private final HallRepository hallRepository;
 
     public CinemaService() {
-        this.movieRepository = new MovieRepositoryImp1();
-        this.showtimeRepository = new ShowtimeRepositoryImp1();
+        this.movieRepository = new MovieRepositoryImpl();
+        this.showtimeRepository = new ShowtimeRepositoryImpl();
         this.ticketRepository = new TicketRepositoryImpl();
         this.userRepository = new UserRepositoryImpl();
         this.hallRepository = new HallRepositoryImpl();
@@ -30,7 +30,7 @@ public class CinemaService {
         return movieRepository.save(movie);
     }
 
-    public list<Movie> getAllMovies() throws SQLException {
+    public List<Movie> getAllMovies() throws SQLException {
         return movieRepository.findAll();
     }
 
@@ -46,8 +46,8 @@ public class CinemaService {
         return showtimeRepository.findByMovieId(movieId);
     }
 
-    public List<Showtime> getShowtimeByDate(Integer movieId) throws SQLException {
-        return showtimeRepository.findByMovieId(movieId);
+    public List<Showtime> getShowtimesByDate(LocalDate date) throws SQLException {
+        return showtimeRepository.findByDate(date);
     }
 
     public User addUser(User user) throws SQLException {
@@ -58,7 +58,7 @@ public class CinemaService {
         return userRepository.findAll();
     }
 
-    Public User getUserByUsername(String username) throws SQLException {
+    public User getUserByUsername(String username) throws SQLException {
         return userRepository.findByUsername(username);
     }
 
@@ -67,11 +67,11 @@ public class CinemaService {
     }
 
     public Hall addHall(Hall hall) throws SQLException {
-        return HallRepository.save(hall);
+        return hallRepository.save(hall);
     }
 
     public List<Hall> getAllHalls() throws SQLException {
-        return hallRepository.findById(id);
+        return hallRepository.findAll();
     }
 
     public Hall getHallById(Integer id) throws SQLException {
@@ -89,9 +89,9 @@ public class CinemaService {
             throw new SQLException("User '" + username + "' not found. Please register first.");
         }
 
-        Ticket ticket = ticketRepository.findById(id);
+        Ticket ticket = ticketRepository.findById(ticketId);
 
-        if (user == null) {
+        if (ticket == null) {
             throw new SQLException("Ticket not found");
         }
 
@@ -103,7 +103,7 @@ public class CinemaService {
         ticket.setIsBooked(true);
         ticketRepository.update(ticket);
 
-        return ticket;
+        return true;
     }
 
     public Ticket cancelBooking(Integer ticketId) throws SQLException {
@@ -114,7 +114,7 @@ public class CinemaService {
         }
 
         if (!ticket.getIsBooked()) {
-            return null
+            return null;
         }
 
         ticket.setCustomerName(null);
@@ -145,7 +145,7 @@ public class CinemaService {
         return bookedCount * showtime.getPrice();
     }
 
-        public double calculateOccupancyRate(Integer showtimeId) throws SQLException {
+    public double calculateOccupancyRate(Integer showtimeId) throws SQLException {
         List<Ticket> allTickets = ticketRepository.findByShowtimeId(showtimeId);
 
         if (allTickets.isEmpty()) {
@@ -154,13 +154,13 @@ public class CinemaService {
 
         long bookedCount = allTickets.stream().filter(Ticket::getIsBooked).count();
 
-        return (double) bookedCount / allTickets.siza() * 100;
+        return (double) bookedCount / allTickets.size() * 100;
     }
 
-        public void generateTicketsForShowtime(Integer showtimeId, int numberOfSeats) throws SQLException {
+    public void generateTicketsForShowtime(Integer showtimeId, int numberOfSeats) throws SQLException {
         for (int i = 1; i <= numberOfSeats; i++) {
 
-            String setNumber = String.format("A%d", i);
+            String seatNumber = String.format("A%d", i);
             Ticket ticket = new Ticket(null, showtimeId, seatNumber, null, false);
 
             ticketRepository.save(ticket);
