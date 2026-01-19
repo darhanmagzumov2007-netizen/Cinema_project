@@ -12,12 +12,18 @@ public class DatabaseConfig {
     private static Connection connection = null;
 
     public static Connection  getConnection() throws SQLException {
-        if (connection == null || connection.isClosed()); {
+        if (connection == null || connection.isClosed()) {
+            try {
+                Class.forName("org.postgresql.Driver");
 
+                connection = DriverManager.getConnection(URL, USER, PASSWORD);
+
+                System.out.println("Database connected succesfully!");
+
+            } catch (ClassNotFoundException e) {
+                throw new SQLException("PsotgerSQL Driver not found", e);
+            }
         }
+
+        return connection;
     }
-
-
-
-
-}
