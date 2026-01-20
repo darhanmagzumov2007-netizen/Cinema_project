@@ -1,4 +1,146 @@
 package repository;
 
-public class TicketRepositoryImpl {
+import config.DatabaseConfig;
+import entity.Ticket;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class TicketRepositoryImpl implements TicketRepository {
+
+    @Override
+    public Ticket save(Ticket ticket) throws SQLException {
+        String sql = "INSERT INTO tickets (showtime_id, seat_number, customer_name, is_booked) VALUES (?, ?, ?, ?) RETURNING id";
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, ticket.getShowtimeId());
+            stmt.setString(2, ticket.getSeatNumber());
+            stmt.setString(3, ticket.getCustomerName());
+            stmt.setBoolean(4, ticket.getIsBooked());
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                ticket.setId(rs.getInt("id"));
+            }
+
+            return ticket;
+        }
+    }
+
+    @Override
+    public Ticket findById(Integer id) throws SQLException {
+        String sql = "SELECT * FROM tickets WHERE id = ?";
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return mapResultSetToTicket(rs);
+            }
+
+            return null;
+        }
+    }
+
+    @Override
+    public List<Ticket> findAll() throws SQLException {
+        String sql = "SELECT * FROM tickets ORDER BY id";
+        List<Ticket> tickets = new ArrayList<>();
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                tickets.add(mapResultSetToTicket(rs));
+            }
+        }
+
+        return tickets;
+    }
+
+    @Override
+    public List<Ticket> findByShowtimeId(Integer showtimeId) throws SQLException {
+        String sql = "SELECT * FROM tickets WHERE showtime_id = ? ORDER BY seat_number";
+        List<Ticket> tickets = new ArrayList<>();
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, showtimeId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                tickets.add(mapResultSetToTicket(rs));
+            }
+        }
+
+        return tickets;
+    }
+
+    @Override
+    public List<Ticket> findAvailableSeats(Integer showtimeId) throws SQLException {
+        String sql = "SELECT * FROM tickets WHERE showtime_id = ? AND is_booked = false ORDER BY seat_number";
+        List<Ticket> tickets = new ArrayList<>();
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, showtimeId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                tickets.add(mapResultSetToTicket(rs));
+            }
+        }
+        return tickets;
+    }
+
+    @Override
+    public void update(Ticket ticket) throws SQLException {
+        String sql = "UPDATE tickets SET showtime_id = ?, seat_number = ?, customer_name = ?, is_booked = ? WHERE id = ?";
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, ticket.getShowtimeId());
+            stmt.setString(2, ticket.getSeatNumber());
+            stmt.setString(3, ticket.getCustomerName());
+            stmt.setBoolean(4, ticket.getIsBooked());
+            stmt.setInt(5, ticket.getId());
+
+            stmt.executeUpdate();
+        }
+    }
+
+    @Override
+    public void delete(Integer id) throws SQLException {
+        String sql = "DELETE FROM tickets WHERE id = ?";
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+
+            stmt.executeUpdate();
+        }
+    }
+
+    private Ticket mapResultSetToTicket(ResultSet rs) throws SQLException {
+        Ticket ticket = new Ticket();
+
+        ticket.setId(rs.getInt("id"));
+        ticket.setShowtimeId(rs.getInt("showtime_id"));
+        ticket.setSeatNumber(rs.getString("seat_number"));
+        ticket.setCustomerName(rs.getString("customer_name"));
+        ticket.setIsBooked(rs.getBoolean("is_booked"));
+
+        return ticket;
+    }
 }
