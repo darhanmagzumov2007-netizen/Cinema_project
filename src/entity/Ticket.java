@@ -46,6 +46,14 @@ public class Ticket {
         isBooked = booked;
     }
 
+    public Ticket(String customerName, Integer showtimeId, Integer id, String seatNumber, Boolean isBooked) {
+        this.customerName = customerName;
+        this.showtimeId = showtimeId;
+        this.id = id;
+        this.seatNumber = seatNumber;
+        this.isBooked = isBooked;
+    }
+
     @Override
     public String toString() {
         return "Ticket{" +
@@ -59,11 +67,5 @@ public class Ticket {
 
 
 
-    public Ticket(String customerName, Integer showtimeId, Integer id, String seatNumber, Boolean isBooked) {
-        this.customerName = customerName;
-        this.showtimeId = showtimeId;
-        this.id = id;
-        this.seatNumber = seatNumber;
-        this.isBooked = isBooked;
-    }
+
 }

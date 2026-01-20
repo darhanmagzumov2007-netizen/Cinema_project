@@ -14,17 +14,7 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(Integer id, String title, String genre, Integer duration, Double rating, LocalDate releaseData) {
 
-
-        this.id = id;
-        this.title = title;
-        this.duration = duration;
-        this.genre = genre;
-        this.rating = rating;
-        this.releaseData = releaseData;
-
-    }
 
     public Integer getDuration() {
         return duration;
@@ -74,6 +64,17 @@ public class Movie {
         this.releaseData = releaseData;
     }
 
+     public Movie(Integer id, String title, String genre, Integer duration, Double rating, LocalDate releaseData) {
+
+
+        this.id = id;
+        this.title = title;
+        this.duration = duration;
+        this.genre = genre;
+        this.rating = rating;
+        this.releaseData = releaseData;
+
+    }
 
     @Override
     public String toString() {

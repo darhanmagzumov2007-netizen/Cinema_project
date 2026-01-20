@@ -9,26 +9,10 @@ private String email;
 private String phone;
 
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", createdAt=" + createdAt +
-                '}';
-    }
 
 
 
-    public User(Integer id, String username, String email, String phone, LocalDateTime createdAt) {
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.phone = phone;
-        this.createdAt = createdAt;
-    }
+
 
     private LocalDateTime createdAt;
 
@@ -72,4 +56,24 @@ private String phone;
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
+    public User(Integer id, String username, String email, String phone, LocalDateTime createdAt) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.phone = phone;
+        this.createdAt = createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", createdAt=" + createdAt +
+                '}';
+    }
 }
+
