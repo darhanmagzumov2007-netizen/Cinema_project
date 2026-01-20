@@ -5,23 +5,20 @@ import java.time.LocalDate;
 public class Movie {
     private Integer id;
     private String title;
-    private Integer duration;
     private String genre;
+    private Integer duration; // in minutes
     private Double rating;
-    private LocalDate releaseData;
+    private LocalDate releaseDate;
 
+    public Movie() {}
 
-    public Movie() {
-    }
-
-
-
-    public Integer getDuration() {
-        return duration;
-    }
-
-    public void setDuration(Integer duration) {
+    public Movie(Integer id, String title, String genre, Integer duration, Double rating, LocalDate releaseDate) {
+        this.id = id;
+        this.title = title;
+        this.genre = genre;
         this.duration = duration;
+        this.rating = rating;
+        this.releaseDate = releaseDate;
     }
 
     public Integer getId() {
@@ -48,6 +45,14 @@ public class Movie {
         this.genre = genre;
     }
 
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
     public Double getRating() {
         return rating;
     }
@@ -56,37 +61,23 @@ public class Movie {
         this.rating = rating;
     }
 
-    public LocalDate getReleaseData() {
-        return releaseData;
+    public LocalDate getReleaseDate() {
+        return releaseDate;
     }
 
-    public void setReleaseData(LocalDate releaseData) {
-        this.releaseData = releaseData;
-    }
-
-     public Movie(Integer id, String title, String genre, Integer duration, Double rating, LocalDate releaseData) {
-
-
-        this.id = id;
-        this.title = title;
-        this.duration = duration;
-        this.genre = genre;
-        this.rating = rating;
-        this.releaseData = releaseData;
-
+    public void setReleaseDate(LocalDate releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
     @Override
     public String toString() {
         return "Movie{" +
                 "id=" + id +
-                ", title=" + title + '\'' +
+                ", title='" + title + '\'' +
                 ", genre='" + genre + '\'' +
                 ", duration=" + duration +
                 ", rating=" + rating +
-                ", releaseDate=" + releaseData +
+                ", releaseDate=" + releaseDate +
                 '}';
     }
-
-
 }
