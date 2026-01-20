@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class DatabaseConfig {
     private static final String URL = "jdbc:postgresql://localhost:5432/cinemadb";
-    private static final String USER = "Adil";
+    private static final String USER = "postgres";
     private static final String PASSWORD = "asd222555";
 
     private static Connection connection = null;
@@ -18,10 +18,10 @@ public class DatabaseConfig {
 
                 connection = DriverManager.getConnection(URL, USER, PASSWORD);
 
-                System.out.println("Database connected succesfully!");
+                System.out.println("Database connected successfully!");
 
             } catch (ClassNotFoundException e) {
-                throw new SQLException("PsotgerSQL Driver not found", e);
+                throw new SQLException("PostgreSQL Driver not found", e);
             }
         }
 
