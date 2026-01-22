@@ -5,7 +5,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.SQLOutput;
 
 public class Main{
-    public static public static void main(String[] args) {
+    static void main(String[] args) {
         System.out.println("---- Welcome to Cinema Management System  ----");
 
         try {
