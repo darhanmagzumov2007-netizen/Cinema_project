@@ -60,5 +60,29 @@ public class MovieRepositoryImpl implements MovieRepository {
 
         return null;
     }
+
+    public List<Movie> findByGenre(String genre) throws SQLException {
+        String sql = "SELECT * FROM movies WHERE genre = ?";
+        List<Movie> movies = new ArrayList<>();
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, genre);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Movie movie = new Movie();
+                movie.setId(rs.getInt("id"));
+                movie.setTitle(rs.getString("title"));
+                movie.setDuration(rs.getInt("duration"));
+                movie.setRating(rs.getDouble("rating"));
+                movie.setReleaseDate(rs.getDate("release_date").toLocalDate());
+                movies.add(movie);
+            }
+        }
+
+        return movies;
+    }
 }
 
