@@ -52,11 +52,6 @@ public class MovieRepositoryImpl implements MovieRepository {
 
     @Override
     public List<Movie> findAll() throws SQLException {
-        return List.of();
-    }
-
-
-    public Movie findAll(Integer id) throws SQLException {
         String sql = "SELECT * FROM movies ORDER BY id";
         List<Movie> movies = new ArrayList<>();
 
@@ -68,8 +63,7 @@ public class MovieRepositoryImpl implements MovieRepository {
                 movies.add(mapResultSetToMovie(rs));
             }
         }
-
-        return (Movie) movies;
+        return movies;
     }
 
     @Override

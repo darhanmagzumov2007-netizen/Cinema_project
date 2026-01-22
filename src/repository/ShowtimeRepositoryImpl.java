@@ -52,7 +52,7 @@ public class ShowtimeRepositoryImpl implements ShowtimeRepository {
 
     @Override
     public List<Showtime> findAll() throws SQLException {
-        String sql = "SELECT * FROM showtimes ORDER VY show_date, show_time";
+        String sql = "SELECT * FROM showtimes ORDER BY show_date, show_time";
         List<Showtime> showtimes = new ArrayList<>();
 
         try (Connection conn = DatabaseConfig.getConnection();
@@ -88,7 +88,7 @@ public class ShowtimeRepositoryImpl implements ShowtimeRepository {
 
     @Override
     public List<Showtime> findByDate(LocalDate date) throws SQLException {
-        String sql = "SELECT * FROM shoqtimes WHERE show_date = ? ORDER BY show_time";
+        String sql = "SELECT * FROM showtimes WHERE show_date = ? ORDER BY show_time";
         List<Showtime> showtimes = new ArrayList<>();
 
         try (Connection conn = DatabaseConfig.getConnection();
@@ -125,7 +125,7 @@ public class ShowtimeRepositoryImpl implements ShowtimeRepository {
 
     @Override
     public void delete(Integer id) throws SQLException {
-        String sql = "DELETE FROM showtimes WHEE id = ?";
+        String sql = "DELETE FROM showtimes WHERE id = ?";
 
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

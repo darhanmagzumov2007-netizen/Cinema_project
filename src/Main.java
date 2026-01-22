@@ -16,6 +16,6 @@ public class Main {
 
         } finally {
             DatabaseConfig.closeConnection();
-        }
+       }
     }
 }
