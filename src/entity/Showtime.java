@@ -11,6 +11,11 @@ public class Showtime {
     private LocalTime showTime;
     private double price;
 
+    public Showtime() {
+    }
+
+    public Showtime(Integer id, int movieId, int hallId, LocalDate showDate, LocalTime showTime, double price) {
+    }
 
 
     public LocalTime getShowTime() {

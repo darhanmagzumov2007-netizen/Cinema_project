@@ -6,6 +6,13 @@ public class Ticket {
     private String seatNumber;
     private String customerName;
     private Boolean isBooked;
+
+    public Ticket() {
+    }
+
+    public Ticket(String customerName, Integer showtimeId, String seatNumber, Object seatNumber1, boolean isBooked) {
+    }
+
     public Integer getId() {
         return id;
     }
@@ -66,6 +73,10 @@ public class Ticket {
     }
 
 
+    public boolean getIsBooked() {
+        return false;
+    }
 
-
+    public void setIsBooked(boolean isBooked) {
+    }
 }

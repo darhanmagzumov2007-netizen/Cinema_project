@@ -106,7 +106,7 @@ public class ShowtimeRepositoryImpl implements ShowtimeRepository {
     }
 
     @Override
-    public void update(Showtime showtime) throws SQLException() {
+    public void update(Showtime showtime) throws SQLException {
         String sql = "UPDATE showtimes SET movie_id = ?, hall_id = ?, show_date = ?, show_time = ?, price = ? WHERE id = ?";
 
         try (Connection conn = DatabaseConfig.getConnection();

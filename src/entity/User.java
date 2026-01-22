@@ -16,6 +16,9 @@ private String phone;
 
     private LocalDateTime createdAt;
 
+    public User() {
+    }
+
 
     public Integer getId() {
         return id;

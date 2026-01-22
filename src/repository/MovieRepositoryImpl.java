@@ -4,8 +4,8 @@ import config.DatabaseConfig;
 import entity.Movie;
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MovieRepositoryImpl implements MovieRepository {
 
@@ -50,11 +50,14 @@ public class MovieRepositoryImpl implements MovieRepository {
         return null;
     }
 
-
-
     @Override
+    public List<Movie> findAll() throws SQLException {
+        return List.of();
+    }
+
+
     public Movie findAll(Integer id) throws SQLException {
-        String sql = "SELECT * FROM movies OEDER BY id";
+        String sql = "SELECT * FROM movies ORDER BY id";
         List<Movie> movies = new ArrayList<>();
 
         try (Connection conn = DatabaseConfig.getConnection();
@@ -66,7 +69,7 @@ public class MovieRepositoryImpl implements MovieRepository {
             }
         }
 
-        return movies;
+        return (Movie) movies;
     }
 
     @Override
