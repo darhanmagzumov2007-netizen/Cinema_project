@@ -1,11 +1,8 @@
 import config.DatabaseConfig;
 import controller.CinemaController;
 
-import java.sql.DatabaseMetaData;
-import java.sql.SQLOutput;
-
-public class Main{
-    static void main(String[] args) {
+public class Main {
+    public static void main(String[] args) {
         System.out.println("---- Welcome to Cinema Management System  ----");
 
         try {
@@ -14,13 +11,11 @@ public class Main{
             CinemaController controller = new CinemaController();
             controller.start();
 
-        } catch (Exception e ) {
+        } catch (Exception e) {
             System.err.println("Failed to start application: " + e.getMessage());
 
-        }finally {
+        } finally {
             DatabaseConfig.closeConnection();
-
         }
-
     }
 }
