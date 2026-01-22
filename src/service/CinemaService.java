@@ -161,8 +161,7 @@ public class CinemaService {
         for (int i = 1; i <= numberOfSeats; i++) {
 
             String seatNumber = String.format("A%d", i);
-            Ticket ticket = new Ticket(null, showtimeId, seatNumber, null, false);
-
+            Ticket ticket = new Ticket(null, showtimeId, null, seatNumber, false);
             ticketRepository.save(ticket);
         }
     }

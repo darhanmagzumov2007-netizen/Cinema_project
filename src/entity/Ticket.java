@@ -10,8 +10,7 @@ public class Ticket {
     public Ticket() {
     }
 
-    public Ticket(String customerName, Integer showtimeId, String seatNumber, Object seatNumber1, boolean isBooked) {
-    }
+
 
     public Integer getId() {
         return id;

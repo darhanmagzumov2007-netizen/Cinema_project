@@ -15,6 +15,12 @@ public class Showtime {
     }
 
     public Showtime(Integer id, int movieId, int hallId, LocalDate showDate, LocalTime showTime, double price) {
+        this.id = id;
+        this.movieId = movieId;
+        this.hallId = hallId;
+        this.showDate = showDate;
+        this.showTime = showTime;
+        this.price = price;
     }
 
 
