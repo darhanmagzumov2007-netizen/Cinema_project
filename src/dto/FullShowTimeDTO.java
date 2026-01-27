@@ -138,4 +138,19 @@ public class FullShowTimeDTO {
         this.hallCapacity = hallCapacity;
     }
 
+    @Override
+    public String toString() {
+        return "Fullshowtime{" +
+                "showtimeId=" + showtimeId +
+                ", movie='" + movieTitle + '\'' +
+                ", genre='" + movieGenre + '\'' +
+                ", category='" + movieCategory + '\'' +
+                ", hall='" + hallName + '\'' +
+                ", date=" + showDate +
+                ", time=" + showTime +
+                ", price=" + price +
+                ", duration=" + movieDuration +
+                "min, rating=" + movieRating +
+                '}';
+    }
 }
