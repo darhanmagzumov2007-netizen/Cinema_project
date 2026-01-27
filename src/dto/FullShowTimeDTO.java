@@ -38,4 +38,104 @@ public class FullShowTimeDTO {
         this.hallCapacity = hallCapacity;
     }
 
+    public Integer getShowtimeId() {
+        return showtimeId;
+    }
+
+    public void setShowtimeId(Integer showtimeId) {
+        this.showtimeId = showtimeId;
+    }
+
+    public LocalDate getShowDate() {
+        return showDate;
+    }
+
+    public void setShowDate(LocalDate showDate) {
+        this.showDate  = showDate;
+    }
+
+    public void setShowTime(LocalTime showTime) {
+        this.showTime = showTime;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public Integer getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(Integer movieId) {
+        this.movieId = movieId;
+    }
+
+    public String getMovieTitle() {
+        return movieTitle;
+    }
+
+    public void setMovieTitle(String movieTitle) {
+        this.movieTitle = movieTitle;
+    }
+
+    public String getMovieGenre() {
+        return movieGenre;
+    }
+
+    public void setMovieGenre(String movieGenre) {
+        this.movieGenre = movieGenre;
+    }
+
+    public String getMovieCategory() {
+        return movieCategory;
+    }
+
+    public void setMovieCategory(String movieCategory) {
+        this.movieCategory = movieCategory;
+    }
+
+    public Integer getMovieDuration() {
+        return movieDuration;
+    }
+
+    public void setMovieDuration(Integer movieDuration) {
+        this.movieDuration = movieDuration;
+    }
+
+    public Double getMovieRating() {
+        return movieRating;
+    }
+
+    public void setMovieRating(Double movieRating) {
+        this.movieRating = movieRating;
+    }
+
+    public Integer getHallId() {
+        return hallId;
+    }
+
+    public void setHallId(Integer hallId) {
+        this.hallId = hallId;
+    }
+
+    public String getHallName() {
+        return hallName;
+    }
+
+    public void setHallName(String hallName) {
+        this.hallName = hallName;
+    }
+
+    public Integer getHallCapacity() {
+        return hallCapacity;
+    }
+
+    public void setHallCapacity(Integer hallCapacity) {
+        this.hallCapacity = hallCapacity;
+    }
+
 }
