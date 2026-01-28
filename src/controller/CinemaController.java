@@ -1,5 +1,7 @@
 package controller;
 
+import dto.FullShowtimeDTO;
+import dto.FullTicketInfoDTO;
 import entity.Movie;
 import entity.Showtime;
 import entity.Ticket;
@@ -16,13 +18,20 @@ import java.util.Scanner;
 public class CinemaController {
     private final CinemaService cinemaService;
     private final Scanner scanner;
+    private User currentUser;
 
-    public CinemaController() {
-        this.cinemaService = new CinemaService();
+    public CinemaController(CinemaService service) {
+        this.cinemaService = service;
         this.scanner = new Scanner(System.in);
+        this.currentUser = null;
     }
 
     public void start() {
+        if (!loginMenu()) {
+            System.out.println("Login required. Exiting...");
+            return;
+        }
+
         while (true) {
             displayMainMenu();
             int choice = getIntInput();
@@ -42,36 +51,52 @@ public class CinemaController {
                         break;
 
                     case 4:
-                        addNewShowtime();
+                        viewFullShowtimeDetails();
                         break;
 
                     case 5:
-                        bookTicketMenu();
+                        addNewShowtime();
                         break;
 
                     case 6:
-                        cancelBookingMenu();
+                        bookTicketMenu();
                         break;
 
                     case 7:
-                        viewAvailableSeats();
+                        cancelBookingMenu();
                         break;
 
                     case 8:
-                        viewShowtimeRevenue();
+                        viewAvailableSeats();
                         break;
 
                     case 9:
-                        viewOccupancyRate();
+                        viewFullTicketDetails();
                         break;
 
                     case 10:
-                        manageUsers();
+                        viewShowtimeRevenue();
                         break;
 
                     case 11:
+                        viewOccupancyRate();
+                        break;
+
+                    case 12:
+                        manageUsers();
+                        break;
+
+                    case 13:
                         manageHalls();
                         break;
+
+                    case 14:
+                        viewMoviesByCategory();
+                        break;
+
+                    case 15:
+                        logout();
+                        return;
 
                     case 0:
                         System.out.println("Thank you for using Cinema Management System!");
@@ -81,9 +106,10 @@ public class CinemaController {
                         System.out.println("Invalid choice. Please try again.");
                 }
 
+            } catch (IllegalArgumentException e) {
+                System.err.println("Validation error: " + e.getMessage());
             } catch (SQLException e) {
                 System.err.println("Database error: " + e.getMessage());
-
             } catch (Exception e) {
                 System.err.println("Error: " + e.getMessage());
             }
@@ -93,21 +119,124 @@ public class CinemaController {
         }
     }
 
+    private boolean loginMenu() {
+        System.out.println("\n=== LOGIN ===");
+        System.out.println("1. Login");
+        System.out.println("2. Register");
+        System.out.print("Enter choice: ");
+
+        int choice = getIntInput();
+
+        try {
+            if (choice == 1) {
+                return login();
+
+            } else if (choice == 2) {
+                return registerAndLogin();
+
+            } else {
+                System.out.println("Invalid choice.");
+
+                return false;
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error: " + e.getMessage());
+            return false;
+        }
+    }
+
+    private boolean login() throws SQLException {
+        System.out.print("Enter username: ");
+        String username = scanner.nextLine();
+
+        System.out.print("Enter password: ");
+        String password = scanner.nextLine();
+
+        User user = cinemaService.login(username, password);
+
+        if (user != null) {
+            currentUser = user;
+            System.out.println("\nLogin successful! Welcome, " + user.getUsername() + " [" + user.getRole() + "]");
+            return true;
+        } else {
+            System.out.println("\nLogin failed. Invalid username or password.");
+
+            return false;
+        }
+    }
+
+    private boolean registerAndLogin() throws SQLException {
+        System.out.println("\n=== REGISTER ===");
+
+        System.out.print("Enter username: ");
+        String username = scanner.nextLine();
+
+        System.out.print("Enter email: ");
+        String email = scanner.nextLine();
+
+        System.out.print("Enter phone: ");
+        String phone = scanner.nextLine();
+
+        System.out.print("Enter password: ");
+        String password = scanner.nextLine();
+
+        System.out.print("Enter role (USER/ADMIN): ");
+        String role = scanner.nextLine().toUpperCase();
+
+        User user = new User();
+
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setPhone(phone);
+        user.setPassword(password);
+        user.setRole(role);
+
+        try {
+            user = cinemaService.addUser(user);
+            currentUser = user;
+
+            System.out.println("\nRegistration successful! Welcome, " + user.getUsername() + " [" + user.getRole() + "]");
+
+            return true;
+        } catch (IllegalArgumentException e) {
+
+            System.err.println("\nValidation error: " + e.getMessage());
+
+            return false;
+        }
+    }
+
+    private void logout() {
+        System.out.println("\nLogged out successfully. Goodbye, " + currentUser.getUsername() + "!");
+
+        currentUser = null;
+    }
+
+    private boolean isAdmin() {
+        return currentUser != null && "ADMIN".equals(currentUser.getRole());
+    }
+
     private void displayMainMenu() {
-        System.out.println("----- CINEMA MANAGEMENT SYSTEM -----");
+        System.out.println("\n----- CINEMA MANAGEMENT SYSTEM -----");
+        System.out.println("Logged in as: " + currentUser.getUsername() + " [" + currentUser.getRole() + "]");
+        System.out.println("------------------------------------");
         System.out.println("1. View All Movies");
         System.out.println("2. Add New Movie");
         System.out.println("3. View Showtimes by Date");
-        System.out.println("4. Add New Showtime");
-        System.out.println("5. Book a Ticket");
-        System.out.println("6. Cancel Booking");
-        System.out.println("7. View Available Seats");
-        System.out.println("8. View Showtime Revenue");
-        System.out.println("9. View Occupancy Rate");
-        System.out.println("10. Manage Users");
-        System.out.println("11. Manage Halls");
+        System.out.println("4. View Full Showtime Details");
+        System.out.println("5. Add New Showtime");
+        System.out.println("6. Book a Ticket");
+        System.out.println("7. Cancel Booking");
+        System.out.println("8. View Available Seats");
+        System.out.println("9. View Full Ticket Details");
+        System.out.println("10. View Showtime Revenue");
+        System.out.println("11. View Occupancy Rate");
+        System.out.println("12. Manage Users");
+        System.out.println("13. Manage Halls");
+        System.out.println("14. View Movies by Category");
+        System.out.println("15. Logout");
         System.out.println("0. Exit");
-
         System.out.print("\nEnter your choice: ");
     }
 
@@ -117,21 +246,30 @@ public class CinemaController {
 
         if (movies.isEmpty()) {
             System.out.println("No movies found.");
+
             return;
         }
 
-        for (Movie movie : movies) {
+        movies.forEach(movie -> {
             System.out.printf("\nID: %d\n", movie.getId());
             System.out.printf("Title: %s\n", movie.getTitle());
             System.out.printf("Genre: %s\n", movie.getGenre());
-            System.out.printf("Duration: %d minutes\n", movie.getDuration());
+            System.out.printf("Category: %s\n", movie.getCategory());
+            System.out.printf("Duration: %d minutes\n",
+                    movie.getDuration());
             System.out.printf("Rating: %.1f/10\n", movie.getRating());
-            System.out.printf("Release Date: %s\n", movie.getReleaseDate());
+            System.out.printf("Release Date: %s\n",
+                    movie.getReleaseDate());
             System.out.println("-------------");
-        }
+        });
     }
 
     private void addNewMovie() throws SQLException {
+        if (!isAdmin()) {
+            System.out.println("\nAccess Denied! This operation requires ADMIN role.");
+            return;
+        }
+
         System.out.println("\n=== ADD NEW MOVIE ===");
 
         System.out.print("Enter movie title: ");
@@ -139,6 +277,9 @@ public class CinemaController {
 
         System.out.print("Enter genre: ");
         String genre = scanner.nextLine();
+
+        System.out.print("Enter category: ");
+        String category = scanner.nextLine();
 
         System.out.print("Enter duration (minutes): ");
         int duration = getIntInput();
@@ -149,7 +290,14 @@ public class CinemaController {
         System.out.print("Enter release date (YYYY-MM-DD): ");
         LocalDate releaseDate = LocalDate.parse(scanner.nextLine());
 
-        Movie movie = new Movie(null, title, genre, duration, rating, releaseDate);
+        Movie movie = new Movie();
+
+        movie.setTitle(title);
+        movie.setGenre(genre);
+        movie.setCategory(category);
+        movie.setDuration(duration);
+        movie.setRating(rating);
+        movie.setReleaseDate(releaseDate);
 
         movie = cinemaService.addMovie(movie);
 
@@ -159,6 +307,7 @@ public class CinemaController {
     private void viewShowtimesByDate() throws SQLException {
         System.out.println("\n=== VIEW SHOWTIMES ===");
         System.out.print("Enter date (YYYY-MM-DD): ");
+
         LocalDate date = LocalDate.parse(scanner.nextLine());
 
         List<Showtime> showtimes = cinemaService.getShowtimesByDate(date);
@@ -172,12 +321,46 @@ public class CinemaController {
             System.out.printf("\nShowtime ID: %d\n", showtime.getId());
             System.out.printf("Movie ID: %d | Hall ID: %d\n", showtime.getMovieId(), showtime.getHallId());
             System.out.printf("Time: %s\n", showtime.getShowTime());
-            System.out.printf("Price: ₸%.2f\n", showtime.getPrice());
+            System.out.printf("Price: $%.2f\n", showtime.getPrice());
             System.out.println("-------------");
         }
     }
 
+    private void viewFullShowtimeDetails() throws SQLException {
+        System.out.println("\n=== FULL SHOWTIME DETAILS ===");
+        System.out.print("Enter showtime ID: ");
+        int showtimeId = getIntInput();
+
+        FullShowtimeDTO showtime = cinemaService.showtimeRepository.getFullShowtimeInfo(showtimeId);
+
+        if (showtime == null) {
+            System.out.println("Showtime not found.");
+            return;
+        }
+
+        System.out.println("\n--- SHOWTIME DETAILS ---");
+        System.out.printf("Showtime ID: %d\n", showtime.getShowtimeId());
+        System.out.printf("Date: %s\n", showtime.getShowDate());
+        System.out.printf("Time: %s\n", showtime.getShowTime());
+        System.out.printf("Price: $%.2f\n", showtime.getPrice());
+        System.out.println("\n--- MOVIE DETAILS ---");
+        System.out.printf("Movie: %s (ID: %d)\n", showtime.getMovieTitle(), showtime.getMovieId());
+        System.out.printf("Genre: %s\n", showtime.getMovieGenre());
+        System.out.printf("Category: %s\n", showtime.getMovieCategory());
+        System.out.printf("Duration: %d minutes\n", showtime.getMovieDuration());
+        System.out.printf("Rating: %.1f/10\n", showtime.getMovieRating());
+        System.out.println("\n--- HALL DETAILS ---");
+        System.out.printf("Hall: %s (ID: %d)\n", showtime.getHallName(), showtime.getHallId());
+        System.out.printf("Capacity: %d seats\n", showtime.getHallCapacity());
+    }
+
     private void addNewShowtime() throws SQLException {
+        if (!isAdmin()) {
+            System.out.println("\nAccess Denied! This operation requires ADMIN role.");
+
+            return;
+        }
+
         System.out.println("\n=== ADD NEW SHOWTIME ===");
 
         System.out.print("Enter movie ID: ");
@@ -207,10 +390,8 @@ public class CinemaController {
 
     private void bookTicketMenu() throws SQLException {
         System.out.println("\n=== BOOK A TICKET ===");
-
         System.out.print("Enter showtime ID: ");
         int showtimeId = getIntInput();
-
         List<Ticket> availableSeats = cinemaService.getAvailableSeats(showtimeId);
 
         if (availableSeats.isEmpty()) {
@@ -219,51 +400,48 @@ public class CinemaController {
         }
 
         System.out.println("\nAvailable seats:");
-        for (Ticket ticket : availableSeats) {
-            System.out.printf("Ticket ID: %d - Seat: %s\n", ticket.getId(), ticket.getSeatNumber());
-        }
+        availableSeats.forEach(ticket ->
+                System.out.printf("Ticket ID: %d - Seat: %s\n", ticket.getId(), ticket.getSeatNumber())
+        );
 
         System.out.print("\nEnter ticket ID to book: ");
+
         int ticketId = getIntInput();
 
-        System.out.print("Enter username: ");
-        String username = scanner.nextLine();
-
         try {
-            boolean success = cinemaService.bookTicket(ticketId, username);
+            boolean success = cinemaService.bookTicket(ticketId, currentUser.getUsername());
 
             if (success) {
                 Ticket bookedTicket = cinemaService.getTicketById(ticketId);
                 System.out.println("\nTicket booked successfully!");
-                System.out.println("  Customer: " + username);
-                System.out.println("  Seat: " + bookedTicket.getSeatNumber());
-                System.out.println("  Status: BOOKED");
+                System.out.println("Customer: " + currentUser.getUsername());
+                System.out.println("Seat: " + bookedTicket.getSeatNumber());
+                System.out.println("Status: BOOKED");
+
             } else {
                 System.out.println("\nFailed to book ticket. Seat may already be booked.");
             }
+
         } catch (SQLException e) {
-            System.err.println("\n✗ Error: " + e.getMessage());
-            if (e.getMessage().contains("not found")) {
-                System.out.println("\nTip: Register a new user first (Menu option 10)");
-            }
+            System.err.println("\nError: " + e.getMessage());
         }
     }
 
     private void cancelBookingMenu() throws SQLException {
         System.out.println("\n=== CANCEL BOOKING ===");
-
         System.out.print("Enter ticket ID to cancel: ");
         int ticketId = getIntInput();
 
         Ticket cancelledTicket = cinemaService.cancelBooking(ticketId);
 
         if (cancelledTicket != null) {
-            System.out.println("\n✓ Booking cancelled successfully!");
-            System.out.println("  Seat: " + cancelledTicket.getSeatNumber());
-            System.out.println("  Status: NOW AVAILABLE");
-            System.out.println("  Showtime ID: " + cancelledTicket.getShowtimeId());
+            System.out.println("\nBooking cancelled successfully!");
+            System.out.println("Seat: " + cancelledTicket.getSeatNumber());
+            System.out.println("Status: NOW AVAILABLE");
+            System.out.println("Showtime ID: " + cancelledTicket.getShowtimeId());
+
         } else {
-            System.out.println("\n✗ Failed to cancel. Ticket may not be booked.");
+            System.out.println("\nFailed to cancel. Ticket may not be booked.");
         }
     }
 
@@ -274,12 +452,42 @@ public class CinemaController {
         int showtimeId = getIntInput();
 
         List<Ticket> availableSeats = cinemaService.getAvailableSeats(showtimeId);
-
         System.out.printf("\nTotal available seats: %d\n", availableSeats.size());
+        availableSeats.forEach(ticket ->
+                System.out.printf("Seat: %s (Ticket ID: %d)\n",
+                        ticket.getSeatNumber(), ticket.getId())
+        );
+    }
 
-        for (Ticket ticket : availableSeats) {
-            System.out.printf("Seat: %s (Ticket ID: %d)\n", ticket.getSeatNumber(), ticket.getId());
+    private void viewFullTicketDetails() throws SQLException {
+        System.out.println("\n=== FULL TICKET DETAILS ===");
+        System.out.print("Enter ticket ID: ");
+        int ticketId = getIntInput();
+
+        FullTicketInfoDTO ticket = cinemaService.ticketRepository.getFullTicketInfo(ticketId);
+
+        if (ticket == null) {
+            System.out.println("Ticket not found.");
+            return;
         }
+
+        System.out.println("\n--- TICKET DETAILS ---");
+        System.out.printf("Ticket ID: %d\n", ticket.getTicketId());
+        System.out.printf("Seat: %s\n", ticket.getSeatNumber());
+        System.out.printf("Customer: %s\n", ticket.getCustomerName() != null ? ticket.getCustomerName() : "Not Booked");
+        System.out.printf("Status: %s\n", ticket.getIsBooked() ? "BOOKED" : "AVAILABLE");
+        System.out.println("\n--- SHOWTIME DETAILS ---");
+        System.out.printf("Date: %s\n", ticket.getShowDate());
+        System.out.printf("Time: %s\n", ticket.getShowTime());
+        System.out.printf("Price: $%.2f\n", ticket.getPrice());
+        System.out.println("\n--- MOVIE DETAILS ---");
+        System.out.printf("Movie: %s\n", ticket.getMovieTitle());
+        System.out.printf("Genre: %s\n", ticket.getMovieGenre());
+        System.out.printf("Category: %s\n", ticket.getMovieCategory());
+        System.out.printf("Duration: %d minutes\n", ticket.getMovieDuration());
+        System.out.println("\n--- HALL DETAILS ---");
+        System.out.printf("Hall: %s\n", ticket.getHallName());
+        System.out.printf("Capacity: %d seats\n", ticket.getHallCapacity());
     }
 
     private void viewShowtimeRevenue() throws SQLException {
@@ -304,6 +512,11 @@ public class CinemaController {
     }
 
     private void manageUsers() throws SQLException {
+        if (!isAdmin()) {
+            System.out.println("\nAccess Denied! This operation requires ADMIN role.");
+            return;
+        }
+
         System.out.println("\n=== USER MANAGEMENT ===");
         System.out.println("1. View All Users");
         System.out.println("2. Add New User");
@@ -336,14 +549,17 @@ public class CinemaController {
             return;
         }
 
-        for (User user : users) {
+        users.forEach(user -> {
             System.out.printf("\nID: %d\n", user.getId());
-            System.out.printf("Username: %s\n", user.getUsername());
+            System.out.printf("Username: %s\n",
+                    user.getUsername());
             System.out.printf("Email: %s\n", user.getEmail());
             System.out.printf("Phone: %s\n", user.getPhone());
-            System.out.printf("Created: %s\n", user.getCreatedAt());
+            System.out.printf("Role: %s\n", user.getRole());
+            System.out.printf("Created: %s\n",
+                    user.getCreatedAt());
             System.out.println("-------------");
-        }
+        });
     }
 
     private void addNewUser() throws SQLException {
@@ -358,7 +574,20 @@ public class CinemaController {
         System.out.print("Enter phone: ");
         String phone = scanner.nextLine();
 
-        User user = new User(null, username, email, phone, null);
+        System.out.print("Enter password: ");
+        String password = scanner.nextLine();
+
+        System.out.print("Enter role (USER/ADMIN): ");
+        String role = scanner.nextLine().toUpperCase();
+
+        User user = new User();
+
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setPhone(phone);
+        user.setPassword(password);
+        user.setRole(role);
+
         user = cinemaService.addUser(user);
 
         System.out.println("\nUser added successfully! ID: " + user.getId());
@@ -371,10 +600,15 @@ public class CinemaController {
         int userId = getIntInput();
 
         cinemaService.deleteUser(userId);
-        System.out.println("\n✓ User deleted successfully!");
+        System.out.println("\nUser deleted successfully!");
     }
 
     private void manageHalls() throws SQLException {
+        if (!isAdmin()) {
+            System.out.println("\nAccess Denied! This operation requires ADMIN role.");
+            return;
+        }
+
         System.out.println("\n=== HALL MANAGEMENT ===");
         System.out.println("1. View All Halls");
         System.out.println("2. Add New Hall");
@@ -403,12 +637,12 @@ public class CinemaController {
             return;
         }
 
-        for (Hall hall : halls) {
+        halls.forEach(hall -> {
             System.out.printf("\nID: %d\n", hall.getId());
             System.out.printf("Name: %s\n", hall.getName());
             System.out.printf("Capacity: %d seats\n", hall.getCapacity());
             System.out.println("-------------");
-        }
+        });
     }
 
     private void addNewHall() throws SQLException {
@@ -422,8 +656,27 @@ public class CinemaController {
 
         Hall hall = new Hall(null, name, capacity);
         hall = cinemaService.addHall(hall);
-
         System.out.println("\nHall added successfully! ID: " + hall.getId());
+    }
+
+    private void viewMoviesByCategory() throws SQLException {
+        System.out.println("\n=== MOVIES BY CATEGORY ===");
+        System.out.print("Enter category: ");
+        String category = scanner.nextLine();
+        List<Movie> movies = cinemaService.getMoviesByCategory(category);
+
+        if (movies.isEmpty()) {
+            System.out.println("No movies found in category: " + category);
+            return;
+        }
+
+        System.out.println("\nMovies in category '" + category + "':");
+        movies.forEach(movie -> {
+            System.out.printf("\n  ID: %d - %s\n",
+                    movie.getId(), movie.getTitle());
+            System.out.printf("  Genre: %s | Duration: %d min | Rating: %.1f/10\n",
+                    movie.getGenre(), movie.getDuration(), movie.getRating());
+        });
     }
 
     private int getIntInput() {
