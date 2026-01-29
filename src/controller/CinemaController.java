@@ -1,6 +1,6 @@
 package controller;
 
-import dto.FullShowtimeDTO;
+
 import dto.FullTicketInfoDTO;
 import entity.Movie;
 import entity.Showtime;
@@ -8,12 +8,14 @@ import entity.Ticket;
 import entity.User;
 import entity.Hall;
 import service.CinemaService;
+import dto.FullShowtimeDTO;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Scanner;
+
 
 public class CinemaController {
     private final CinemaService cinemaService;

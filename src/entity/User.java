@@ -3,23 +3,6 @@ package entity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 public class User {
-private Integer id;
-private String username;
-private String email;
-private String phone;
-
-
-
-
-
-
-
-    private LocalDateTime createdAt;
-
-    public User() {
-    }
-
-
     public Integer getId() {
         return id;
     }
@@ -52,6 +35,22 @@ private String phone;
         this.phone = phone;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -60,11 +59,13 @@ private String phone;
         this.createdAt = createdAt;
     }
 
-    public User(Integer id, String username, String email, String phone, LocalDateTime createdAt) {
+    public User(Integer id, String username, String email, String phone, String password, String role, LocalDateTime createdAt) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.phone = phone;
+        this.password = password;
+        this.role = role;
         this.createdAt = createdAt;
     }
 
@@ -75,8 +76,26 @@ private String phone;
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
+                ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
                 ", createdAt=" + createdAt +
                 '}';
     }
+
+    private Integer id;
+    private String username;
+    private String email;
+    private String phone;
+    private String password;
+    private String role;
+    private LocalDateTime createdAt;
 }
+
+
+
+
+
+
+
+
 

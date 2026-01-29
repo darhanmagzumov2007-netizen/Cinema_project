@@ -1,6 +1,7 @@
 package repository;
 
 import config.DatabaseConfig;
+import dto.FullTicketInfoDTO;
 import entity.Ticket;
 import java.sql.*;
 import java.util.ArrayList;
@@ -143,4 +144,11 @@ public class TicketRepositoryImpl implements TicketRepository {
 
         return ticket;
     }
+
+    @Override
+    public FullTicketInfoDTO getFullTicketInfo(Integer ticketId) throws SQLException;
+
+
+
+
 }

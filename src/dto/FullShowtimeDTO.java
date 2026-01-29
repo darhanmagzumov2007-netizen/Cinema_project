@@ -3,41 +3,7 @@ package dto;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class FullShowTimeDTO {
-    private Integer showtimeId;
-    private LocalDate showDate;
-    private LocalTime showTime;
-    private Double price;
-
-    private Integer movieId;
-    private String movieTitle;
-    private String movieGenre;
-    private String movieCategory;
-    private Integer movieDuration;
-    private Double movieRating;
-
-    private Integer hallId;
-    private String hallName;
-    private Integer hallCapacity;
-
-    public FullShowtimeDTO() {}
-
-    public FullShowtimeDTO(Integer showtimeId, LocalDate showDate, LocalTime showTime, Double price, Integer movieId, String movieTitle, String movieGenre, String movieCategory, Integer movieDuration, Double movieRating, Integer hallId, String hallName, Integer hallCapacity) {
-        this.showtimeId = showtimeId;
-        this.showDate = showDate;
-        this.showTime = showTime;
-        this.price = price;
-        this.movieId = movieId;
-        this.movieTitle = movieTitle;
-        this.movieGenre = movieGenre;
-        this.movieCategory = movieCategory;
-        this.movieDuration = movieDuration;
-        this.movieRating = movieRating;
-        this.hallId = hallId;
-        this.hallName = hallName;
-        this.hallCapacity = hallCapacity;
-    }
-
+public class FullShowtimeDTO {
     public Integer getShowtimeId() {
         return showtimeId;
     }
@@ -51,7 +17,11 @@ public class FullShowTimeDTO {
     }
 
     public void setShowDate(LocalDate showDate) {
-        this.showDate  = showDate;
+        this.showDate = showDate;
+    }
+
+    public LocalTime getShowTime() {
+        return showTime;
     }
 
     public void setShowTime(LocalTime showTime) {
@@ -138,6 +108,38 @@ public class FullShowTimeDTO {
         this.hallCapacity = hallCapacity;
     }
 
+    public FullShowTimeDTO(Integer showtimeId, LocalDate showDate, LocalTime showTime, Double price, Integer movieId, String movieTitle, String movieGenre, String movieCategory, Integer movieDuration, Double movieRating, Integer hallId, String hallName, Integer hallCapacity) {
+        this.showtimeId = showtimeId;
+        this.showDate = showDate;
+        this.showTime = showTime;
+        this.price = price;
+        this.movieId = movieId;
+        this.movieTitle = movieTitle;
+        this.movieGenre = movieGenre;
+        this.movieCategory = movieCategory;
+        this.movieDuration = movieDuration;
+        this.movieRating = movieRating;
+        this.hallId = hallId;
+        this.hallName = hallName;
+        this.hallCapacity = hallCapacity;
+    }
+
+    private Integer showtimeId;
+    private LocalDate showDate;
+    private LocalTime showTime;
+    private Double price;
+
+    private Integer movieId;
+    private String movieTitle;
+    private String movieGenre;
+    private String movieCategory;
+    private Integer movieDuration;
+    private Double movieRating;
+
+    private Integer hallId;
+    private String hallName;
+    private Integer hallCapacity;
+
     @Override
     public String toString() {
         return "Fullshowtime{" +
@@ -152,5 +154,7 @@ public class FullShowTimeDTO {
                 ", duration=" + movieDuration +
                 "min, rating=" + movieRating +
                 '}';
+
     }
 }
+

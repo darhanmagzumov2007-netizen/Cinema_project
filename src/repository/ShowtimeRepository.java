@@ -1,5 +1,6 @@
 package repository;
 
+import dto.FullShowtimeDTO;
 import entity.Showtime;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -13,4 +14,6 @@ public interface ShowtimeRepository {
     List<Showtime> findByDate(LocalDate date) throws SQLException;
     void update(Showtime showtime) throws SQLException;
     void delete(Integer Id) throws SQLException;
+FullShowtimeDTO getFullShowtimeInfo(Integer showtimeId) throws SQLException;
+List<FullShowtimeDTO> getAllFullshowtimes()throws SQLException;
 }
