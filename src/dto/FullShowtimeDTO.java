@@ -108,7 +108,7 @@ public class FullShowtimeDTO {
         this.hallCapacity = hallCapacity;
     }
 
-    public FullShowTimeDTO(Integer showtimeId, LocalDate showDate, LocalTime showTime, Double price, Integer movieId, String movieTitle, String movieGenre, String movieCategory, Integer movieDuration, Double movieRating, Integer hallId, String hallName, Integer hallCapacity) {
+    public FullShowtimeDTO(Integer showtimeId, LocalDate showDate, LocalTime showTime, Double price, Integer movieId, String movieTitle, String movieGenre, String movieCategory, Integer movieDuration, Double movieRating, Integer hallId, String hallName, Integer hallCapacity) {
         this.showtimeId = showtimeId;
         this.showDate = showDate;
         this.showTime = showTime;
