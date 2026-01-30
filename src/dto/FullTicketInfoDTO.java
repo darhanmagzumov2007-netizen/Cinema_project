@@ -167,6 +167,7 @@ public class FullTicketInfoDTO {
     private Integer hallId;
     private String hallName;
     private Integer hallCapacity;
+    public FullTicketInfoDTO(int ticketId, int showtimeId, int movieId, int duration, int hallId, int capacity, String seatNumber, String customerName, String title, String genre, String category, String hallName, boolean booked, LocalDate showDate, LocalTime showTime) {}
 
     @Override
     public String toString() {
