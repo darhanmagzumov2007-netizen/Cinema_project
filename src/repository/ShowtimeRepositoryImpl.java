@@ -12,8 +12,8 @@ public class ShowtimeRepositoryImpl implements ShowtimeRepository {
 
     @Override
     public Showtime save(Showtime showtime) throws SQLException {
-        String sql = "INSERT INTO showtimes (movie_id, hall_id, show_date, show_time, price) VALUES (?, ?, ?, ?, ?) RETURNING id";
-
+        String sql = "INSERT INTO showtimes (movie_id, hall_id, show_date, show_time, price) " +
+                "VALUES (?, ?, ?, ?, ?) RETURNING id";
 
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -71,13 +71,13 @@ public class ShowtimeRepositoryImpl implements ShowtimeRepository {
 
     @Override
     public List<Showtime> findByMovieId(Integer movieId) throws SQLException {
-        String sql = "SELECT * FROM showtimes WHERE movie_id = ? ORDER BY show_date, show_time";
-
-
+        String sql = "SELECT * FROM showtimes " +
+                "WHERE movie_id = ? " +
+                "ORDER BY show_date, show_time";
         List<Showtime> showtimes = new ArrayList<>();
 
-        try(Connection conn = DatabaseConfig.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, movieId);
             ResultSet rs = stmt.executeQuery();
@@ -96,7 +96,7 @@ public class ShowtimeRepositoryImpl implements ShowtimeRepository {
         List<Showtime> showtimes = new ArrayList<>();
 
         try (Connection conn = DatabaseConfig.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)){
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setDate(1, Date.valueOf(date));
             ResultSet rs = stmt.executeQuery();
@@ -111,9 +111,9 @@ public class ShowtimeRepositoryImpl implements ShowtimeRepository {
 
     @Override
     public void update(Showtime showtime) throws SQLException {
-        String sql = "UPDATE showtimes SET movie_id = ?, hall_id = ?, show_date = ?, show_time = ?, price = ? WHERE id = ?";
-
-
+        String sql = "UPDATE showtimes " +
+                "SET movie_id = ?, hall_id = ?, show_date = ?, show_time = ?, price = ? " +
+                "WHERE id = ?";
 
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -153,6 +153,7 @@ public class ShowtimeRepositoryImpl implements ShowtimeRepository {
 
         return showtime;
     }
+
     @Override
     public FullShowtimeDTO getFullShowtimeInfo(Integer showtimeId) throws SQLException {
         String sql = "SELECT " +
