@@ -1,8 +1,9 @@
 package entity;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 public class User {
+
+
     public User() {
 
     }
@@ -63,7 +64,7 @@ public class User {
         this.createdAt = createdAt;
     }
 
-    public User(Integer id, String username, String email, String phone, String password, String role, LocalDateTime createdAt) {
+    public User() {
         this.id = id;
         this.username = username;
         this.email = email;
