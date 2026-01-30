@@ -1,6 +1,7 @@
 package repository;
 
 import config.DatabaseConfig;
+import dto.FullShowtimeDTO;
 import entity.Showtime;
 import java.sql.*;
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ public class ShowtimeRepositoryImpl implements ShowtimeRepository {
     @Override
     public Showtime save(Showtime showtime) throws SQLException {
         String sql = "INSERT INTO showtimes (movie_id, hall_id, show_date, show_time, price) VALUES (?, ?, ?, ?, ?) RETURNING id";
+
 
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -70,6 +72,8 @@ public class ShowtimeRepositoryImpl implements ShowtimeRepository {
     @Override
     public List<Showtime> findByMovieId(Integer movieId) throws SQLException {
         String sql = "SELECT * FROM showtimes WHERE movie_id = ? ORDER BY show_date, show_time";
+
+
         List<Showtime> showtimes = new ArrayList<>();
 
         try(Connection conn = DatabaseConfig.getConnection();
@@ -109,6 +113,8 @@ public class ShowtimeRepositoryImpl implements ShowtimeRepository {
     public void update(Showtime showtime) throws SQLException {
         String sql = "UPDATE showtimes SET movie_id = ?, hall_id = ?, show_date = ?, show_time = ?, price = ? WHERE id = ?";
 
+
+
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -146,5 +152,84 @@ public class ShowtimeRepositoryImpl implements ShowtimeRepository {
         showtime.setPrice(rs.getDouble("price"));
 
         return showtime;
+    }
+    @Override
+    public FullShowtimeDTO getFullShowtimeInfo(Integer showtimeId) throws SQLException {
+        String sql = "SELECT " +
+                "s.id as showtime_id, s.show_date, s.show_time, s.price, " +
+                "m.id as movie_id, m.title, m.genre, m.category, m.duration, m.rating, " +
+                "h.id as hall_id, h.name as hall_name, h.capacity " +
+                "FROM showtimes s " +
+                "JOIN movies m ON s.movie_id = m.id " +
+                "JOIN halls h ON s.hall_id = h.id " +
+                "WHERE s.id = ?";
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, showtimeId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new FullShowtimeDTO(
+                        rs.getInt("showtime_id"),
+                        rs.getDate("show_date").toLocalDate(),
+                        rs.getTime("show_time").toLocalTime(),
+                        rs.getDouble("price"),
+                        rs.getInt("movie_id"),
+                        rs.getString("title"),
+                        rs.getString("genre"),
+                        rs.getString("category"),
+                        rs.getInt("duration"),
+                        rs.getDouble("rating"),
+                        rs.getInt("hall_id"),
+                        rs.getString("hall_name"),
+                        rs.getInt("capacity")
+                );
+            }
+
+            return null;
+        }
+    }
+
+    @Override
+    public List<FullShowtimeDTO> getAllFullShowtimes() throws SQLException {
+        List<FullShowtimeDTO> showtimeInfoList = new ArrayList<>();
+
+        String sql = "SELECT " +
+                "s.id as showtime_id, s.show_date, s.show_time, s.price, " +
+                "m.id as movie_id, m.title, m.genre, m.category, m.duration, m.rating, " +
+                "h.id as hall_id, h.name as hall_name, h.capacity " +
+                "FROM showtimes s " +
+                "JOIN movies m ON s.movie_id = m.id " +
+                "JOIN halls h ON s.hall_id = h.id " +
+                "ORDER BY s.show_date, s.show_time";
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                FullShowtimeDTO dto = new FullShowtimeDTO(
+                        rs.getInt("showtime_id"),
+                        rs.getDate("show_date").toLocalDate(),
+                        rs.getTime("show_time").toLocalTime(),
+                        rs.getDouble("price"),
+                        rs.getInt("movie_id"),
+                        rs.getString("title"),
+                        rs.getString("genre"),
+                        rs.getString("category"),
+                        rs.getInt("duration"),
+                        rs.getDouble("rating"),
+                        rs.getInt("hall_id"),
+                        rs.getString("hall_name"),
+                        rs.getInt("capacity")
+                );
+
+                showtimeInfoList.add(dto);
+            }
+        }
+
+        return showtimeInfoList;
     }
 }
