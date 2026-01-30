@@ -28,11 +28,11 @@ public class FullTicketInfoDTO {
         this.customerName = customerName;
     }
 
-    public Boolean getBooked() {
+    public Boolean getIsBooked() {
         return isBooked;
     }
 
-    public void setBooked(Boolean booked) {
+    public void setIsBooked(Boolean booked) {
         isBooked = booked;
     }
 

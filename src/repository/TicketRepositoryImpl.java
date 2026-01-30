@@ -179,7 +179,7 @@ public class TicketRepositoryImpl implements TicketRepository {
                         rs.getString("genre"),
                         rs.getString("category"),
                         rs.getString("hall_name"),
-                        rs.getBoolean("booked"),
+                        rs.getBoolean("is_booked"),
                         rs.getDate("show_date").toLocalDate(),
                         rs.getTime("show_time").toLocalTime()
 
@@ -194,8 +194,48 @@ public class TicketRepositoryImpl implements TicketRepository {
 
     @Override
     public List<FullShowtimeDTO> getFullTicketInfoByShowtime(Integer showtimeId) throws SQLException {
-        return List.of();
-    }
+        List<FullShowtimeDTO> ticketInfoList = new ArrayList<>();
+
+        String sql = "SELECT " +
+                "t.id as ticket_id, t.seat_number, t.customer_name, t.is_booked, " +
+                "s.id as showtime_id, s.show_date, s.show_time, s.price, " +
+                "m.id as movie_id, m.title, m.genre, m.category, m.duration, " +
+                "h.id as hall_id, h.name as hall_name, h.capacity " +
+                "FROM tickets t " +
+                "JOIN showtimes s ON t.showtime_id = s.id " +
+                "JOIN movies m ON s.movie_id = m.id " +
+                "JOIN halls h ON s.hall_id = h.id " +
+                "WHERE s.id = ? " +
+                "ORDER BY t.seat_number";
+
+        try (Connection conn = DatabaseConfig.getConnection()
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, showtimeId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                FullTicketInfoDTO dto = new FullTicketInfoDTO(
+                        rs.getInt("ticket_id"),
+                        rs.getInt("showtime_id"),
+                        rs.getInt("movie_id"),
+                        rs.getInt("duration"),
+                        rs.getInt("hall_id"),
+                        rs.getInt("capacity"),
+                        rs.getString("seat_number"),
+                        rs.getString("customer_name"),
+                        rs.getString("title"),
+                        rs.getString("genre"),
+                        rs.getString("category"),
+                        rs.getString("hall_name"),
+                        rs.getBoolean("is_booked"),
+                        rs.getDate("show_date").toLocalDate(),
+                        rs.getTime("show_time").toLocalTime()
+                );
+                ticketInfoList.add(dto);
+            }
+
+        }
+        return ticketInfoList;
+        }
 
 
 }
