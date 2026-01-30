@@ -466,7 +466,7 @@ public class CinemaController {
         System.out.print("Enter ticket ID: ");
         int ticketId = getIntInput();
 
-        FullTicketInfoDTO ticket = cinemaService.ticketRepository.getFullTicketInfo(ticketId);
+        FullTicketInfoDTO ticket = cinemaService.ticketRepository.getFullTicketInfo (ticketId);
 
         if (ticket == null) {
             System.out.println("Ticket not found.");
@@ -477,7 +477,7 @@ public class CinemaController {
         System.out.printf("Ticket ID: %d\n", ticket.getTicketId());
         System.out.printf("Seat: %s\n", ticket.getSeatNumber());
         System.out.printf("Customer: %s\n", ticket.getCustomerName() != null ? ticket.getCustomerName() : "Not Booked");
-        System.out.printf("Status: %s\n", ticket.getIsBooked() ? "BOOKED" : "AVAILABLE");
+        System.out.printf("Status: %s\n", ticket.getBooked() ? "BOOKED" : "AVAILABLE");
         System.out.println("\n--- SHOWTIME DETAILS ---");
         System.out.printf("Date: %s\n", ticket.getShowDate());
         System.out.printf("Time: %s\n", ticket.getShowTime());

@@ -11,7 +11,7 @@ public class MovieRepositoryImpl implements MovieRepository {
 
     @Override
     public Movie save(Movie movie) throws SQLException {
-        String sql = "INSERT INTO movies (title, genre, duration, rating, release_date) VALUES (?, ?, ?, ?, ?) RETURNING id";
+        String sql = "INSERT INTO movies (title, genre, duration, rating, release_date,category) VALUES (?, ?, ?, ?, ?, ?) RETURNING id";
 
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -68,7 +68,7 @@ public class MovieRepositoryImpl implements MovieRepository {
 
     @Override
     public List<Movie> findByGenre(String genre) throws SQLException {
-        String sql = "SELECT * FROM movies WHERE genre = ?";
+        String sql = "SELECT * FROM movies WHERE genre = ? ORDER BY title";
         List<Movie> movies = new ArrayList<>();
 
         try (Connection conn = DatabaseConfig.getConnection();

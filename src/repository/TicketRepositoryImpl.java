@@ -1,6 +1,7 @@
 package repository;
 
 import config.DatabaseConfig;
+import dto.FullShowtimeDTO;
 import dto.FullTicketInfoDTO;
 import entity.Ticket;
 import java.sql.*;
@@ -146,9 +147,27 @@ public class TicketRepositoryImpl implements TicketRepository {
     }
 
     @Override
-    public FullTicketInfoDTO getFullTicketInfo(Integer ticketId) throws SQLException;
+    public FullTicketInfoDTO getFullTicketInfo(Integer ticketId) throws SQLException{
+String sql = "SELECT " +
+        "t.id as ticket_id, t.seat_number, t.customer_name, t.booked, " +
+        "s.id as showtime_id, s.show_date, s.show_time, s.price, " +
+        "m.id as movie_id, m.title, m.genre, m.category, m.duration, " +
+        "h.id as hall_id, h.name as hall_name, h.capacity " +
+        "FROM tickets t " +
+        "JOIN showtimes s ON t.showtime_id = s.id " +
+        "JOIN movies m ON s.movie_id = m.id " +
+        "JOIN halls h ON s.hall_id = h.id " +
+        "WHERE t.id = ?";
 
 
+
+
+    }
+
+    @Override
+    public List<FullShowtimeDTO> getFullTicketInfoByShowtime(Integer showtimeId) throws SQLException {
+        return List.of();1
+    }ч
 
 
 }
