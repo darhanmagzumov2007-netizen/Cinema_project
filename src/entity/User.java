@@ -4,9 +4,6 @@ import java.time.LocalDateTime;
 public class User {
 
 
-    public User() {
-
-    }
 
     public Integer getId() {
         return id;
