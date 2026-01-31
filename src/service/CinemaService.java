@@ -10,6 +10,7 @@ import repository.*;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class CinemaService {
@@ -171,7 +172,7 @@ public class CinemaService {
     public User login(String username, String password) throws SQLException {
         User user = userRepository.findByUsername(username);
 
-        if (user != null && user.getPassword().equals(password)) {
+        if (user != null && Objects.equals(user.getPassword(), password)) {
             return user;
         }
 

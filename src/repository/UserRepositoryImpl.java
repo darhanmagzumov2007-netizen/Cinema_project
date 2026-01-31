@@ -10,7 +10,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User save(User user) throws SQLException {
-        String sql = "INSERT INTO users (username, email, phone) VALUES (?, ?, ?) RETURNING id, created_at";
+        String sql = "INSERT INTO users (username, email, phone, password, role) VALUES (?, ?, ?, ?, ?) RETURNING id, created_at";
 
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -18,6 +18,8 @@ public class UserRepositoryImpl implements UserRepository {
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getPhone());
+            stmt.setString(4, user.getPassword());
+            stmt.setString(5, user.getRole() != null ? user.getRole() : "USER");
 
             ResultSet rs = stmt.executeQuery();
 
@@ -103,7 +105,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void update(User user) throws SQLException {
-        String sql = "UPDATE users SET username = ?, email = ?, phone = ? WHERE id = ?";
+        String sql = "UPDATE users SET username = ?, email = ?, phone = ?, password = ?, role = ? WHERE id = ?";
 
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -111,7 +113,9 @@ public class UserRepositoryImpl implements UserRepository {
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getPhone());
-            stmt.setInt(4, user.getId());
+            stmt.setString(4, user.getPassword());
+            stmt.setString(5, user.getRole() != null ? user.getRole() : "USER");
+            stmt.setInt(6, user.getId());
 
             stmt.executeUpdate();
         }
@@ -129,6 +133,16 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    private boolean hasColumn(ResultSet rs, String columnName) throws SQLException {
+        ResultSetMetaData meta = rs.getMetaData();
+        for (int i = 1; i <= meta.getColumnCount(); i++) {
+            if (columnName.equalsIgnoreCase(meta.getColumnLabel(i))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private User mapResultSetToUser(ResultSet rs) throws SQLException {
         User user = new User();
 
@@ -136,6 +150,12 @@ public class UserRepositoryImpl implements UserRepository {
         user.setUsername(rs.getString("username"));
         user.setEmail(rs.getString("email"));
         user.setPhone(rs.getString("phone"));
+        if (hasColumn(rs, "password")) {
+            user.setPassword(rs.getString("password"));
+        }
+        if (hasColumn(rs, "role")) {
+            user.setRole(rs.getString("role"));
+        }
         user.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
 
         return user;
