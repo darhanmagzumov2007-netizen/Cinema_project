@@ -1,6 +1,5 @@
 package repository;
 
-import dto.FullShowtimeDTO;
 import dto.FullTicketInfoDTO;
 import entity.Ticket;
 import java.sql.SQLException;
@@ -15,5 +14,5 @@ public interface TicketRepository {
     void update(Ticket ticket) throws SQLException;
     void delete(Integer Id) throws SQLException;
     FullTicketInfoDTO getFullTicketInfo(Integer ticketId) throws SQLException;
-    List<FullShowtimeDTO> getFullTicketInfoByShowtime(Integer showtimeId) throws SQLException;
+    List<FullTicketInfoDTO> getFullTicketInfoByShowtime(Integer showtimeId) throws SQLException;
 }

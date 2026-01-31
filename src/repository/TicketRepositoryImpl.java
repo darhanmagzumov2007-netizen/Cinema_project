@@ -1,7 +1,6 @@
 package repository;
 
 import config.DatabaseConfig;
-import dto.FullShowtimeDTO;
 import dto.FullTicketInfoDTO;
 import entity.Ticket;
 import java.sql.*;
@@ -149,7 +148,7 @@ public class TicketRepositoryImpl implements TicketRepository {
     @Override
     public FullTicketInfoDTO getFullTicketInfo(Integer ticketId) throws SQLException {
         String sql = "SELECT " +
-                "t.id as ticket_id, t.seat_number, t.customer_name, t.booked, " +
+                "t.id as ticket_id, t.seat_number, t.customer_name, t.is_booked, " +
                 "s.id as showtime_id, s.show_date, s.show_time, s.price, " +
                 "m.id as movie_id, m.title, m.genre, m.category, m.duration, " +
                 "h.id as hall_id, h.name as hall_name, h.capacity " +
@@ -193,8 +192,8 @@ public class TicketRepositoryImpl implements TicketRepository {
 
 
     @Override
-    public List<FullShowtimeDTO> getFullTicketInfoByShowtime(Integer showtimeId) throws SQLException {
-        List<FullShowtimeDTO> ticketInfoList = new ArrayList<>();
+    public List<FullTicketInfoDTO> getFullTicketInfoByShowtime(Integer showtimeId) throws SQLException {
+        List<FullTicketInfoDTO> ticketInfoList = new ArrayList<>();
 
         String sql = "SELECT " +
                 "t.id as ticket_id, t.seat_number, t.customer_name, t.is_booked, " +
@@ -208,8 +207,9 @@ public class TicketRepositoryImpl implements TicketRepository {
                 "WHERE s.id = ? " +
                 "ORDER BY t.seat_number";
 
-        try (Connection conn = DatabaseConfig.getConnection()
-        PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setInt(1, showtimeId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {

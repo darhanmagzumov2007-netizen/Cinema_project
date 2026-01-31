@@ -15,5 +15,5 @@ public interface ShowtimeRepository {
     void update(Showtime showtime) throws SQLException;
     void delete(Integer Id) throws SQLException;
 FullShowtimeDTO getFullShowtimeInfo(Integer showtimeId) throws SQLException;
-List<FullShowtimeDTO> getAllFullshowtimes()throws SQLException;
+List<FullShowtimeDTO> getAllFullShowtimes()throws SQLException;
 }

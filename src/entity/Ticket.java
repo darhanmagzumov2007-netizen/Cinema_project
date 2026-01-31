@@ -10,6 +10,8 @@ public class Ticket {
     public Ticket() {
     }
 
+    public Ticket(String customerName, Integer showtimeId, String seatNumber, Object seatNumber1, boolean isBooked) {
+    }
 
 
     public Integer getId() {
@@ -73,9 +75,10 @@ public class Ticket {
 
 
     public boolean getIsBooked() {
-        return false;
+        return Boolean.TRUE.equals(isBooked);
     }
 
     public void setIsBooked(boolean isBooked) {
+        this.isBooked = isBooked;
     }
 }

@@ -1,4 +1,6 @@
 import config.DatabaseConfig;
+import controller.MainController;
+import service.CinemaService;
 
 public class Main {
     public static void main(String[] args) {
@@ -7,7 +9,8 @@ public class Main {
         try {
             DatabaseConfig.getConnection();
 
-            CinemaController controller = new CinemaController();
+            CinemaService cinemaService = CinemaService.getInstance();
+            MainController controller = new MainController(cinemaService);
             controller.start();
 
         } catch (Exception e) {
@@ -15,6 +18,6 @@ public class Main {
 
         } finally {
             DatabaseConfig.closeConnection();
-       }
+        }
     }
 }

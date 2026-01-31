@@ -167,7 +167,23 @@ public class FullTicketInfoDTO {
     private Integer hallId;
     private String hallName;
     private Integer hallCapacity;
-    public FullTicketInfoDTO(int ticketId, int showtimeId, int movieId, int duration, int hallId, int capacity, String seatNumber, String customerName, String title, String genre, String category, String hallName, boolean booked, LocalDate showDate, LocalTime showTime) {}
+    public FullTicketInfoDTO(int ticketId, int showtimeId, int movieId, int duration, int hallId, int capacity, String seatNumber, String customerName, String title, String genre, String category, String hallName, boolean booked, LocalDate showDate, LocalTime showTime) {
+        this.ticketId = ticketId;
+        this.showtimeId = showtimeId;
+        this.movieId = movieId;
+        this.movieDuration = duration;
+        this.hallId = hallId;
+        this.hallCapacity = capacity;
+        this.seatNumber = seatNumber;
+        this.customerName = customerName;
+        this.movieTitle = title;
+        this.movieGenre = genre;
+        this.movieCategory = category;
+        this.hallName = hallName;
+        this.isBooked = booked;
+        this.showDate = showDate;
+        this.showTime = showTime;
+    }
 
     @Override
     public String toString() {
