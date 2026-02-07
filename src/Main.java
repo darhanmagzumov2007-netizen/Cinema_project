@@ -1,8 +1,3 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by Fernflower decompiler)
-//
-
 import config.DatabaseConfig;
 import controller.MainController;
 import service.CinemaService;
