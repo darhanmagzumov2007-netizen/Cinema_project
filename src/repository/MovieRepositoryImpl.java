@@ -21,6 +21,7 @@ public class MovieRepositoryImpl implements MovieRepository {
             stmt.setInt(3, movie.getDuration());
             stmt.setDouble(4, movie.getRating());
             stmt.setDate(5, Date.valueOf(movie.getReleaseDate()));
+            stmt.setString(6, movie.getCategory());
 
             ResultSet rs = stmt.executeQuery();
 
