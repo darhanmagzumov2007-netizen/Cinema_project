@@ -183,27 +183,27 @@ public class MainController {
         System.out.println("=== MOVIES ===");
         System.out.println("1. View All Movies");
         System.out.println("2. Add New Movie (Admin)");
-        System.out.println("14. View Movies by Category");
-        System.out.println("15. Manage Movies (Admin)");
+        System.out.println("3. View Movies by Category");
+        System.out.println("4. Manage Movies (Admin)");
 
         System.out.println("\n=== SHOWTIMES ===");
-        System.out.println("3. View Showtimes by Date");
-        System.out.println("4. View Full Showtime Details");
-        System.out.println("5. Add New Showtime (Admin)");
-        System.out.println("10. View Showtime Revenue");
-        System.out.println("11. View Occupancy Rate");
-        System.out.println("16. Manage Showtimes (Admin)");
+        System.out.println("5. View Showtimes by Date");
+        System.out.println("6. View Full Showtime Details");
+        System.out.println("7. Add New Showtime (Admin)");
+        System.out.println("8. View Showtime Revenue");
+        System.out.println("9. View Occupancy Rate");
+        System.out.println("10. Manage Showtimes (Admin)");
 
         System.out.println("\n=== TICKETS ===");
-        System.out.println("6. Book a Ticket");
-        System.out.println("7. Cancel Booking");
-        System.out.println("8. View Available Seats");
-        System.out.println("9. View Full Ticket Details");
-        System.out.println("17. View My Tickets");
+        System.out.println("11. Book a Ticket");
+        System.out.println("12. Cancel Booking");
+        System.out.println("13. View Available Seats");
+        System.out.println("14. View Full Ticket Details");
+        System.out.println("15. View My Tickets");
 
         System.out.println("\n=== ADMINISTRATION ===");
-        System.out.println("12. Manage Users (Admin)");
-        System.out.println("13. Manage Halls (Admin)");
+        System.out.println("16. Manage Users (Admin)");
+        System.out.println("17. Manage Halls (Admin)");
 
         System.out.println("\n=== SYSTEM ===");
         System.out.println("18. Logout");
