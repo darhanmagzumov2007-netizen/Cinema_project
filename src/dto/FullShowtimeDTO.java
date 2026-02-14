@@ -4,6 +4,22 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class FullShowtimeDTO {
+    private Integer showtimeId;
+    private LocalDate showDate;
+    private LocalTime showTime;
+    private Double price;
+
+    private Integer movieId;
+    private String movieTitle;
+    private String movieGenre;
+    private String movieCategory;
+    private Integer movieDuration;
+    private Double movieRating;
+
+    private Integer hallId;
+    private String hallName;
+    private Integer hallCapacity;
+
     public Integer getShowtimeId() {
         return showtimeId;
     }
@@ -123,22 +139,6 @@ public class FullShowtimeDTO {
         this.hallName = hallName;
         this.hallCapacity = hallCapacity;
     }
-
-    private Integer showtimeId;
-    private LocalDate showDate;
-    private LocalTime showTime;
-    private Double price;
-
-    private Integer movieId;
-    private String movieTitle;
-    private String movieGenre;
-    private String movieCategory;
-    private Integer movieDuration;
-    private Double movieRating;
-
-    private Integer hallId;
-    private String hallName;
-    private Integer hallCapacity;
 
     @Override
     public String toString() {
